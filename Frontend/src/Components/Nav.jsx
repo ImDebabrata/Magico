@@ -1,15 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Nav = () => {
+  const { token, role } = useSelector((store) => store.auth);
   return (
     <NavBar>
       <Header>Es Magico</Header>
       <NavLink to={"/"}>Login</NavLink>
       <NavLink to={"/signup"}>Signup</NavLink>
-      <NavLink to={"/admin"}>Admin</NavLink>
-      <NavLink to={"/user"}>User</NavLink>
+      {role === "admin" && <NavLink to={"/admin"}>Admin</NavLink>}
+      {token && <NavLink to={"/user"}>User</NavLink>}
     </NavBar>
   );
 };

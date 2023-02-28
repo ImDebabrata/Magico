@@ -101,7 +101,7 @@ const Login = () => {
               value={userInfo.password}
               name="password"
               onChange={handleUserInfo}
-              type="text"
+              type="password"
               id="password"
             />
           </InputContainer>
