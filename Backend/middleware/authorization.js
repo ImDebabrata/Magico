@@ -7,9 +7,9 @@ const verifyToken = (req, res, next) => {
     return res.status(403).send({ res: "Not Authorized" });
   }
   jwt.verify(token, "webtoken", async function (err, decoded) {
-    const userPresent = await UserModel.findOne({ _id: decoded?.userID });
+    const userPresent = await UserModel.findOne({ email: decoded?.email });
+    console.log("userPresent:", userPresent);
     if (userPresent?.role === "admin") {
-      // req.body.userID = userPresent._id;
       next();
     } else {
       res.status(403).send({ res: "Not Authorized" });

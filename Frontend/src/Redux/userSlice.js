@@ -23,19 +23,18 @@ const userSlice = createSlice({
   },
 });
 
-export const { processingRequest, errorlog, signupSuccess, loginSuccess } =
-  userSlice.actions;
+export const { processingRequest, errorlog, setAllUser } = userSlice.actions;
 
 export const getUsers = (payload) => (dispatch) => {
   dispatch(processingRequest());
   return axios
     .get(`${process.env.REACT_APP_API}/admin/alluser`, {
       params: {
-        dekhoBhai: "just for test",
+        token: payload,
       },
     })
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
+    .then((res) => dispatch(setAllUser(res.data.res)))
+    .catch((err) => dispatch(errorlog()));
 };
 
 export default userSlice.reducer;

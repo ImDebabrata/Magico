@@ -3,31 +3,37 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { getUsers } from "../Redux/userSlice";
 
-const users = [
-  { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
-  { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
-  { name: "Sukhdev", email: "sukhdev.gmail.com", role: "Admin" },
-  { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
-  { name: "Jay", email: "sukhdev.gmail.com", role: "User" },
-  { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
-  { name: "Sukhdev", email: "Jay.gmail.com", role: "User" },
-  { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
-  { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
-  { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
-  { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
-];
+// const users = [
+//   { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
+//   { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
+//   { name: "Sukhdev", email: "sukhdev.gmail.com", role: "Admin" },
+//   { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
+//   { name: "Jay", email: "sukhdev.gmail.com", role: "User" },
+//   { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
+//   { name: "Sukhdev", email: "Jay.gmail.com", role: "User" },
+//   { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
+//   { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
+//   { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
+//   { name: "Sukhdev", email: "sukhdev.gmail.com", role: "User" },
+// ];
 
 const Admin = () => {
   const dispatch = useDispatch();
+  const {
+    auth: { token },
+    user: { allUser },
+  } = useSelector((store) => store);
+  console.log(allUser);
+  console.log(token);
 
   useEffect(() => {
-    dispatch(getUsers());
+    dispatch(getUsers(token));
   }, []);
   return (
     <Container>
       <Heading>Admin Dashboard</Heading>
       <Grid>
-        {users.map((user, id) => {
+        {allUser.map((user, id) => {
           return (
             <GridBox key={id}>
               <h5>Name: {user.name}</h5>
@@ -50,6 +56,7 @@ const Container = styled.div`
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  padding: 10px;
   gap: 15px;
 `;
 
