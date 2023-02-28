@@ -32,17 +32,28 @@ const Admin = () => {
   return (
     <Container>
       <Heading>Admin Dashboard</Heading>
-      <Grid>
-        {allUser.map((user, id) => {
-          return (
-            <GridBox key={id}>
-              <h5>Name: {user.name}</h5>
-              <div>Email: {user.email}</div>
-              <div>Role: {user.role}</div>
-            </GridBox>
-          );
-        })}
-      </Grid>
+      <Table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Update</th>
+          </tr>
+        </thead>
+        <tbody>
+          {allUser.map((user, id) => {
+            return (
+              <tr key={id}>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.role}</td>
+                <td>Update</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </Table>
     </Container>
   );
 };
@@ -53,18 +64,17 @@ const Container = styled.div`
   border: 1px solid black;
 `;
 
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  padding: 10px;
-  gap: 15px;
-`;
-
-const GridBox = styled.div`
-  border: 1px solid black;
-  text-align: left;
-`;
-
 const Heading = styled.h3``;
+
+const Table = styled.table`
+  border-collapse: collapse;
+  width: 80%;
+  /* border: 1px solid black; */
+  & th,
+  td {
+    border: 1px solid grey;
+  }
+  margin: 30px auto;
+`;
 
 export default Admin;
