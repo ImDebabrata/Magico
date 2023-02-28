@@ -7,6 +7,9 @@ const authSlice = createSlice({
     isLoading: false,
     isError: false,
     token: null,
+    name: null,
+    email: null,
+    role: null,
   },
   reducers: {
     processingRequest(state, action) {
@@ -23,6 +26,9 @@ const authSlice = createSlice({
     },
     loginSuccess(state, action) {
       state.token = action.payload.token;
+      state.name = action.payload.name;
+      state.email = action.payload.email;
+      state.role = action.payload.role;
       state.isLoading = false;
       state.isError = false;
     },
