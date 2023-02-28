@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { AiOutlineMail } from "react-icons/ai";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { signupUser } from "../Redux/authSlice";
 
 const initialUserInfo = {
   name: "",
@@ -10,7 +14,8 @@ const initialUserInfo = {
 
 const Signup = () => {
   const [userInfo, setUserInfo] = useState(initialUserInfo);
-  console.log("userInfo:", userInfo);
+  const dispatch = useDispatch();
+  useSelector((store) => console.log(store.auth));
   const handleSwitchChange = () => {
     setUserInfo({
       ...userInfo,
@@ -22,10 +27,18 @@ const Signup = () => {
     const { value, name } = e.target;
     setUserInfo({ ...userInfo, [name]: value });
   };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    console.log(userInfo);
+    dispatch(signupUser(userInfo))
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
   return (
     <FormBox>
       <Heading>Signup</Heading>
-      <form>
+      <form onSubmit={handleFormSubmit}>
         {/* Name */}
         <InputContainer>
           <InputLabel top={userInfo.name.length} htmlFor="name">
@@ -48,7 +61,7 @@ const Signup = () => {
             value={userInfo.email}
             name="email"
             onChange={handleUserInfo}
-            type="text"
+            type="email"
             id="email"
           />
         </InputContainer>
@@ -61,7 +74,7 @@ const Signup = () => {
             value={userInfo.password}
             name="password"
             onChange={handleUserInfo}
-            type="text"
+            type="password"
             id="password"
           />
         </InputContainer>

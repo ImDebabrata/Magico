@@ -5,6 +5,8 @@ require("dotenv").config();
 const { connection } = require("./config/db");
 const { loginRouter } = require("./routes/login.route");
 const { signupRouter } = require("./routes/signup.route");
+const { adminRouter } = require("./routes/admin.route");
+const { verifyToken } = require("./middleware/authorization");
 
 const PORT = process.env.PORT;
 
@@ -16,6 +18,8 @@ app.get("/", (req, res) => {
 
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
+app.use(verifyToken);
+app.use("/admin", adminRouter);
 
 app.listen(PORT, async () => {
   try {

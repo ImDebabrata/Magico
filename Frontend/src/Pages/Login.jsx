@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { loginUser } from "../Redux/authSlice";
+
 import {
   Heading,
   InputContainer,
@@ -19,7 +22,8 @@ const initialUserInfo = {
 
 const Login = () => {
   const [userInfo, setUserInfo] = useState(initialUserInfo);
-  console.log("userInfo:", userInfo);
+  useSelector((store) => console.log(store));
+  const dispatch = useDispatch();
   const handleSwitchChange = () => {
     setUserInfo({
       ...userInfo,
@@ -31,10 +35,17 @@ const Login = () => {
     const { value, name } = e.target;
     setUserInfo({ ...userInfo, [name]: value });
   };
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    console.log(userInfo);
+    dispatch(loginUser(userInfo))
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
   return (
     <FormBox>
       <Heading>Login</Heading>
-      <form>
+      <form onSubmit={handleFormSubmit}>
         {/* Email */}
         <InputContainer>
           <InputLabel top={userInfo.email.length} htmlFor="email">
@@ -62,7 +73,7 @@ const Login = () => {
           />
         </InputContainer>
         {/* Role */}
-        <SwitchContainer>
+        {/* <SwitchContainer>
           <SwitchLabel htmlFor="user">User</SwitchLabel>
           <Switch
             id="user"
@@ -76,7 +87,7 @@ const Login = () => {
             checked={userInfo.role === "admin"}
             onChange={handleSwitchChange}
           />
-        </SwitchContainer>
+        </SwitchContainer> */}
         {/* Submit */}
         <SubmitButton type="submit">Login</SubmitButton>
       </form>
