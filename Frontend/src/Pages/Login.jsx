@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { loginUser } from "../Redux/authSlice";
 import { useNavigate } from "react-router-dom";
 import { BsFillPatchCheckFill } from "react-icons/bs";
+import { ImSpinner3 } from "react-icons/im";
 import { MdError } from "react-icons/md";
-import styled from "styled-components";
 
 import {
   Heading,
@@ -17,6 +17,7 @@ import {
   SwitchContainer,
   SwitchLabel,
   Switch,
+  ToastBox,
 } from "./Signup";
 
 const initialUserInfo = {
@@ -27,15 +28,15 @@ const initialUserInfo = {
 const Login = () => {
   const [showToast, setShowToast] = useState("");
   const [userInfo, setUserInfo] = useState(initialUserInfo);
-  const { isError } = useSelector((store) => store.auth);
+  const { isError, isLoading } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleSwitchChange = () => {
-    setUserInfo({
-      ...userInfo,
-      role: userInfo.role === "user" ? "admin" : "user",
-    });
-  };
+  // const handleSwitchChange = () => {
+  //   setUserInfo({
+  //     ...userInfo,
+  //     role: userInfo.role === "user" ? "admin" : "user",
+  //   });
+  // };
 
   const handleUserInfo = (e) => {
     const { value, name } = e.target;
@@ -121,36 +122,13 @@ const Login = () => {
           />
         </SwitchContainer> */}
           {/* Submit */}
-          <SubmitButton type="submit">Login</SubmitButton>
+          <SubmitButton type="submit">
+            {isLoading ? <ImSpinner3 /> : "Login"}
+          </SubmitButton>
         </form>
       </FormBox>
     </>
   );
 };
-
-export const ToastBox = styled.div`
-  position: absolute;
-  left: 50%;
-  transition: 500ms linear;
-  top: ${(style) => style.top};
-  transform: translate(-50%, 0);
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  min-width: 246px;
-  gap: 5px;
-  background-color: ${(style) => style.alertType};
-  border-radius: 7px;
-  & > svg {
-    display: block;
-    width: 30px;
-    height: 30px;
-    color: white;
-  }
-  & > div {
-    color: white;
-    font-size: 18px;
-  }
-`;
 
 export default Login;

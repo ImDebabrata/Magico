@@ -4,6 +4,10 @@ import { AiOutlineMail } from "react-icons/ai";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { signupUser } from "../Redux/authSlice";
+import { useNavigate } from "react-router-dom";
+import { MdError } from "react-icons/md";
+import { BsFillPatchCheckFill } from "react-icons/bs";
+import { ImSpinner3 } from "react-icons/im";
 
 const initialUserInfo = {
   name: "",
@@ -14,8 +18,12 @@ const initialUserInfo = {
 
 const Signup = () => {
   const [userInfo, setUserInfo] = useState(initialUserInfo);
+  const [showToast, setShowToast] = useState("");
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
-  useSelector((store) => console.log(store.auth));
+  const { isError, isLoading } = useSelector((store) => store.auth);
+
   const handleSwitchChange = () => {
     setUserInfo({
       ...userInfo,
@@ -31,73 +39,96 @@ const Signup = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log(userInfo);
-    dispatch(signupUser(userInfo))
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    dispatch(signupUser(userInfo)).then((res) => {
+      if (res.type === "Authentication/loginSuccess") {
+        setShowToast(res.payload.res);
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      } else {
+        setShowToast(res.payload);
+      }
+      setTimeout(() => {
+        setShowToast("");
+      }, 2000);
+    });
   };
   return (
-    <FormBox>
-      <Heading>Signup</Heading>
-      <form onSubmit={handleFormSubmit}>
-        {/* Name */}
-        <InputContainer>
-          <InputLabel top={userInfo.name.length} htmlFor="name">
-            Enter Name *
-          </InputLabel>
-          <Input
-            value={userInfo.name}
-            name="name"
-            onChange={handleUserInfo}
-            type="text"
-            id="name"
-          />
-        </InputContainer>
-        {/* Email */}
-        <InputContainer>
-          <InputLabel top={userInfo.email.length} htmlFor="email">
-            Enter Email *
-          </InputLabel>
-          <Input
-            value={userInfo.email}
-            name="email"
-            onChange={handleUserInfo}
-            type="email"
-            id="email"
-          />
-        </InputContainer>
-        {/* Password */}
-        <InputContainer>
-          <InputLabel top={userInfo.password.length} htmlFor="password">
-            Enter Password *
-          </InputLabel>
-          <Input
-            value={userInfo.password}
-            name="password"
-            onChange={handleUserInfo}
-            type="password"
-            id="password"
-          />
-        </InputContainer>
-        {/* Role */}
-        <SwitchContainer>
-          <SwitchLabel htmlFor="user">User</SwitchLabel>
-          <Switch
-            id="user"
-            checked={userInfo.role === "admin"}
-            onChange={handleSwitchChange}
-          />
-          <SwitchSlider onClick={handleSwitchChange} />
-          <SwitchLabel htmlFor="admin">Admin</SwitchLabel>
-          <Switch
-            id="admin"
-            checked={userInfo.role === "admin"}
-            onChange={handleSwitchChange}
-          />
-        </SwitchContainer>
-        {/* Submit */}
-        <SubmitButton type="submit">Signup</SubmitButton>
-      </form>
-    </FormBox>
+    <>
+      <ToastBox
+        alertType={isError ? "red" : "#38a169"}
+        top={showToast ? "10px" : "-15%"}
+      >
+        {isError ? <MdError /> : <BsFillPatchCheckFill />}
+        <div color="white" fsize="18px">
+          {showToast}
+        </div>
+      </ToastBox>
+      <FormBox>
+        <Heading>Signup</Heading>
+        <form onSubmit={handleFormSubmit}>
+          {/* Name */}
+          <InputContainer>
+            <InputLabel top={userInfo.name.length} htmlFor="name">
+              Enter Name *
+            </InputLabel>
+            <Input
+              value={userInfo.name}
+              name="name"
+              onChange={handleUserInfo}
+              type="text"
+              id="name"
+            />
+          </InputContainer>
+          {/* Email */}
+          <InputContainer>
+            <InputLabel top={userInfo.email.length} htmlFor="email">
+              Enter Email *
+            </InputLabel>
+            <Input
+              value={userInfo.email}
+              name="email"
+              onChange={handleUserInfo}
+              type="email"
+              id="email"
+            />
+          </InputContainer>
+          {/* Password */}
+          <InputContainer>
+            <InputLabel top={userInfo.password.length} htmlFor="password">
+              Enter Password *
+            </InputLabel>
+            <Input
+              value={userInfo.password}
+              name="password"
+              onChange={handleUserInfo}
+              type="password"
+              id="password"
+            />
+          </InputContainer>
+          {/* Role */}
+          <SwitchContainer>
+            <SwitchLabel htmlFor="user">User</SwitchLabel>
+            <Switch
+              id="user"
+              checked={userInfo.role === "admin"}
+              onChange={handleSwitchChange}
+            />
+            <SwitchSlider onClick={handleSwitchChange} />
+            <SwitchLabel htmlFor="admin">Admin</SwitchLabel>
+            <Switch
+              id="admin"
+              checked={userInfo.role === "admin"}
+              onChange={handleSwitchChange}
+            />
+          </SwitchContainer>
+          {/* Submit */}
+          <SubmitButton type="submit">
+            {isLoading ? <ImSpinner3 /> : "Signup"}
+          </SubmitButton>
+        </form>
+      </FormBox>
+    </>
   );
 };
 
@@ -222,6 +253,43 @@ export const SubmitButton = styled.button`
   cursor: pointer;
   &:focus {
     background-color: #4f8327;
+  }
+  & > svg {
+    scale: 1.5;
+    animation: rotation 2s infinite linear;
+    @keyframes rotation {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(359deg);
+      }
+    }
+  }
+`;
+
+export const ToastBox = styled.div`
+  position: absolute;
+  left: 50%;
+  transition: 500ms linear;
+  top: ${(style) => style.top};
+  transform: translate(-50%, 0);
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  min-width: 246px;
+  gap: 5px;
+  background-color: ${(style) => style.alertType};
+  border-radius: 7px;
+  & > svg {
+    display: block;
+    width: 30px;
+    height: 30px;
+    color: white;
+  }
+  & > div {
+    color: white;
+    font-size: 18px;
   }
 `;
 

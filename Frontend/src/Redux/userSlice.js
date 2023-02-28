@@ -2,7 +2,7 @@ import axios from "axios";
 import { createSlice } from "@reduxjs/toolkit";
 
 const userSlice = createSlice({
-  name: "Authentication",
+  name: "User",
   initialState: {
     isLoading: false,
     isError: false,
