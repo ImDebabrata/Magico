@@ -8,6 +8,10 @@ const User = () => {
       <Header>User Info</Header>
       <UserBox>
         <FaUserAlt />
+        <div>Name: Debabrata</div>
+        <div>Email: datta@gmail.com</div>
+        <div>Role: User</div>
+        <button>Update</button>
       </UserBox>
     </Container>
   );
@@ -16,15 +20,27 @@ const User = () => {
 const Container = styled.div``;
 const Header = styled.h3``;
 const UserBox = styled.div`
-  width: 450px;
-  height: 500px;
+  width: 350px;
+  padding: 20px;
   margin: auto;
   border: 1px solid black;
   & > svg {
     border: 1px solid black;
-    font-size: 7rem;
+    font-size: 5.5rem;
     border-radius: 50%;
-    border-offset: 4px;
+    padding: 4px;
+    /* margin: 7px 0; */
+  }
+  & > div {
+    margin: 20px 0;
+  }
+  & > button {
+    padding: 5px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: #6dab3c;
   }
 `;
 
